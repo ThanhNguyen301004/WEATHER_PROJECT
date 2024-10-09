@@ -1,0 +1,44 @@
+{% if weather_data %}
+<h2>Chi tiết về thời tiết</h2>
+<div class="temp-del-container">
+    <h3>Nhiệt độ</h3>
+    {% if temp_del == "increase" %}
+    <p>Tăng</p>
+    <p>Tăng với mức cao nhất là {{ max_temp }}°C lúc {{ max_temp_index }}:00</p>
+    {% endif %}
+    {% if temp_del == "diminish" %}
+    <p>Giảm</p>
+    <p>Giảm với mức thấp nhất là {{ min_temp }}°C lúc {{ min_temp_index }}:00</p>
+    {% endif %}
+    {% if temp_del == "stable" %}
+    <p>Ổn định</p>
+    <p>Nhiệt độ ổn định ở mức {{ cur_temp }}°C</p>
+    {% endif %}
+</div>
+
+<div class="feel-del-container">
+    <h3>Cảm giác</h3>
+    <p>Cảm giác: {{ feel_temp }}°C Nhiệt độ: {{ cur_temp }}°C</p>
+    {% if feel_del == "Warm" %}
+    <p>Ấm</p>
+    <p>Cảm thấy ấm hơn nhiệt độ thực tế</p>
+    {% endif %}
+    {% if feel_del == "Warmth" %}
+    <p>Hơi ấm</p>
+    <p>Cảm thấy ấm hơn nhiệt độ thực tế do Độ ẩm</p>
+    {% endif %}
+    {% if feel_del == "Slightly cold" %}
+    <p>Hơ lạnh</p>
+    <p>Cảm thấy lạnh hơn nhiệt độ thực tế do độ ẩm và gió</p>
+    {% endif %}
+    {% if feel_del == "Cold" %}
+    <p>Lạnh</p>
+    <p>Cảm thấy lạnh hơn bình thường</p>
+    {% endif %}
+    {% if feel_del == "Normal" %}
+    <p>Bình thường</p>
+    <p>Nhiệt độ chúng ta cảm nhận được tương tự như thực tế</p>
+    {% endif %}
+</div>
+
+{% endif %}

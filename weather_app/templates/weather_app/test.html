@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Prediction</title>
+    <style>
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        function predictWeather() {
+            // Lấy giá trị từ các trường nhập liệu
+            var temperature = document.getElementById("temperature_city").value;
+            var pressure = document.getElementById("pressure_city").value;
+            var humidity = document.getElementById("humidity_city").value;
+            var precip = document.getElementById("precip_city").value;
+            var wind = document.getElementById("wind_city").value;
+            var cloud = document.getElementById("cloud_city").value;
+            var nameCity = document.getElementById("name_city").value;
+
+            // Giả sử bạn có một hàm dự đoán thời tiết
+            var prediction = "Dự đoán thời tiết cho " + nameCity + " với nhiệt độ " + temperature + "°C, áp suất " + pressure + " mb, độ ẩm " + humidity + "%, lượng mưa " + precip + " mm, gió " + wind + " km/h, mây " + cloud + "%.";
+
+            // Cập nhật nhãn với giá trị nhập vào
+            document.getElementById("predictionLabel").innerText = prediction;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var acc = document.getElementsByClassName("accordion");
+            for (var i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <button class="accordion">Weather prediction model by city</button>
+        <div class="panel">
+            <form onsubmit="event.preventDefault(); predictWeather();" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="temperature_city">Temperature (°C)</label>
+                    <input type="number" class="form-control" id="temperature_city" name="temperature_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="pressure_city">Pressure (mb)</label>
+                    <input type="number" class="form-control" id="pressure_city" name="pressure_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="humidity_city">Humidity (%)</label>
+                    <input type="number" class="form-control" id="humidity_city" name="humidity_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="precip_city">Precip (mm)</label>
+                    <input type="number" class="form-control" id="precip_city" name="precip_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="wind_city">Wind (km/h)</label>
+                    <input type="number" class="form-control" id="wind_city" name="wind_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="cloud_city">Cloud (%)</label>
+                    <input type="number" class="form-control" id="cloud_city" name="cloud_city" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="name_city">Name city</label>
+                    <input type="text" class="form-control" id="name_city" name="name_city" required>
+                </div>
+                <button type="submit" class="btn-primary" name="predict_city_btn">Predict</button>
+            </form>
+            {% if prediction_city_text %}
+            <h3 class="mt-3">
+                Thời tiết được dự đoán với nhiệt độ ({{ temperature_city }}), áp suất ({{ pressure_city }}), độ ẩm ({{ humidity_city }}), lượng mưa ({{precip_city}}), gió ({{wind_city}}), mây ({{cloud_city}})
+            </h3>
+            <h3 style="color: green;">{{ prediction_city_text }}</h3>
+            {% endif %}
+        </div>
+        <h3 class="mt-3" id="predictionLabel">Thời tiết được dự đoán sẽ hiển thị ở đây.</h3>
+    </div>
+</body>
+</html>

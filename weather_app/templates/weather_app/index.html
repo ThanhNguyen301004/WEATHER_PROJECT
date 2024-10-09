@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  {% include 'weather_app/predict_weather.html' %}
+  {% include 'weather_app/predict_city.html' %}
+  <h2>Weather Map</h2>
+  <div class="container-map">
+    <iframe width="650" height="450"
+      src="https://embed.windy.com/embed2.html?lat={{ latitude }}&lon={{ longitude }}&detailLat=16.0544&detailLon=108.2022&width=650&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1"
+      frameborder="0" style="border-radius: 15px;"></iframe>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" name="city" placeholder="Search city">
+    <button type="submit" name="search_btn">Sreach</button>
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+  </form>
+
+  <div class="comparison-container">
+    {% if weather_data %}
+    <div class="city-container">
+      {% include 'weather_app/city_weather.html' %}
+    </div>
+    {% endif %}
+  </div>
+  {% if temperatures %}
+  <div class="chart_container">
+    <canvas id="myChart" width="400" height="80"></canvas>
+    {% include 'weather_app/chart.js' %}
+  </div>
+  {% endif %}
+
+  {% if weather_data %}
+  <div class="deltail_weather">
+    {% include 'weather_app/deltail_weather.html' %}
+  </div>
+
+  <div class="propose-container">
+    {% include 'weather_app/propose_weather.html' %}
+  </div>
+  {% endif %}
+
+  {% if weather_data %}
+  <div class="dif_weather_container">
+    {% include 'weather_app/dif_weather.html' %}
+  </div>
+  {% endif %}
+
+</body>
+
+</html>

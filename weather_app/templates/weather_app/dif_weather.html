@@ -1,0 +1,49 @@
+<div class="dif-container">
+    <h3>Có khác biệt về thời tiết ?</h3>
+    <form>
+        <div class="weather-condition">
+            <input type="radio" id="sun" name="weather" value="sun">
+            <label for="sun">Nắng</label>
+        </div>
+        <div class="weather-condition">
+            <input type="radio" id="rain" name="weather" value="rain">
+            <label for="rain">Mưa</label>
+        </div>
+        <div class="weather-condition">
+            <input type="radio" id="drizzle" name="weather" value="drizzle">
+            <label for="drizzle">Mưa phùn</label>
+        </div>
+        <div class="weather-condition">
+            <input type="radio" id="fog" name="weather" value="fog">
+            <label for="fog">Sương mù</label>
+        </div>
+        <div class="weather-condition">
+            <input type="radio" id="snow" name="weather" value="snow">
+            <label for="snow">Tuyết</label>
+        </div>
+        <div class="slider-container-temp">
+            <h3>Nhiệt độ (°C)</h3>
+            <input type="number" class="form-control" id="temp_max" name="temp_max" step="any" required>
+        </div>
+        <div class="slider-container">
+            <h3>Gió</h3>
+            <div>
+                <input type="radio" id="Light" name="Wind" value="Light">
+                <label for="Light">Nhẹ</label>
+                <input type="radio" id="Moderate" name="Wind" value="Moderate">
+                <label for="Moderate">Vừa</label>
+                <input type="radio" id="Strong" name="Wind" value="Strong">
+                <label for="Strong">Mạnh</label>
+            </div>
+        </div>
+        <div class="input-container">
+            <h3>Email</h3>
+            <input type="text" id="email" name="email">
+        </div>
+        <div class="input-area-container">
+            <p data-v-3cdad65e="" class="heading">Thông tin bổ sung</p>
+            <textarea name="Any_additional_information" value="Any_additional_information" data-v-3cdad65e="" rows="4" cols="40" class="owm_textarea"></textarea>
+        </div>
+        <button class="send-button" type="submit">Gửi</button>
+    </form>
+</div>

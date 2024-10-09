@@ -1,0 +1,87 @@
+<h3>Đề xuất cho bạn</h3>
+<h4>Ô</h4>
+<p>Chỉ số thời tiết ảnh hưởng đến việc mang ô có yếu tố dự báo mưa hoặc tuyết trong ngày. Nếu dự kiến có mưa, bạn có thể cân nhắc mang theo ô nếu bạn đi ra ngoài.</p>
+{% if umbrella_rec == "Phải" %}
+<h5 style="color: red;">Phải có</h5>
+{% elif umbrella_rec == "Cần" %}
+<h5 style="color: orange;">Cần</h5>
+{% elif umbrella_rec == "Có khả năng cần thiết" %}
+<h5 style="color: yellow;">Có khả năng cần thiết</h5>
+{% elif umbrella_rec == "Có khả năng không cần" %}
+<h5 style="color: greenyellow;">Có khả năng không cần</h5>
+{% else %}
+<h5 style="color: green;">Không cần</h5>
+{% endif %}
+
+<h4>Ngoài trời</h4>
+<p>Chỉ số ngoài trời sử dụng điều kiện thời tiết và môi trường, bao gồm cường độ UV, gió, nhiệt độ, lượng mưa và chất lượng không khí, để cung cấp lời khuyên về sự phù hợp của các hoạt động ngoài trời.</p>
+{% if outdoor_act_adv == "Rất tệ" %}
+<h5 style="color: red;">Rất tệ</h5>
+{% elif outdoor_act_adv == "Kém" %}
+<h5 style="color: orange;">Kém</h5>
+{% elif outdoor_act_adv == "Khá tốt" %}
+<h5 style="color: yellow;">Khá tốt</h5>
+{% elif outdoor_act_adv == "Tốt" %}
+<h5 style="color: greenyellow;">Tốt</h5>
+{% else %}
+<h5 style="color: green;">Tuyệt vời</h5>
+{% endif %}
+
+
+<h4>Chỉ số UV</h4>
+<p>Chỉ số ngoài trời sử dụng điều kiện thời tiết và môi trường, bao gồm cường độ UV, gió, nhiệt độ, lượng mưa và chất lượng không khí, để cung cấp lời khuyên về sự phù hợp của các hoạt động ngoài trời.</p>
+{% if outdoor_act_adv == "Thấp" %}
+<h5 style="color: green;">Thấp</h5>
+{% elif outdoor_act_adv == "Bình thường" %}
+<h5 style="color: greenyellow;">Bình thường</h5>
+{% elif outdoor_act_adv == "Cao" %}
+<h5 style="color: yellow;">Cao</h5>
+{% elif outdoor_act_adv == "Rất cao" %}
+<h5 style="color: yellow;">Rất cao</h5>
+{% else %}
+<h5 style="color: red;">Tột độ</h5>
+{% endif %}
+
+
+<h4>Lái xe an toàn</h4>
+<p>Chỉ số an toàn khi lái xe sử dụng các dự báo và điều kiện thời tiết hiện tại để cung cấp thông tin cho người lái xe để họ có thể di chuyển an toàn và tránh các tai nạn liên quan đến thời tiết.</p>
+{% if dri_saf_index == "Rất tệ" %}
+<h5 style="color: red;">Rất tệ</h5>
+{% elif dri_saf_index == "Kém" %}
+<h5 style="color: orange;">Bad</h5>
+{% elif dri_saf_index == "Khá tốt" %}
+<h5 style="color: yellow;">Khá tốt</h5>
+{% elif dri_saf_index == "Tốt" %}
+<h5 style="color: greenyellow;">Tôt</h5>
+{% else %}
+<h5 style="color: green;">Tuyệt vời</h5>
+{% endif %}
+
+
+<h4>Quần áo</h4>
+<p>Chỉ số thời tiết ảnh hưởng đến trang phục có yếu tố lượng mưa, gió, độ ẩm và nhiệt độ khi đưa ra đề xuất về cách ăn mặc phù hợp với thời tiết.</p>
+{% if dri_saf_index == "Áo khoác dày" %}
+<h5 style="color: red;">Áo khoác dày</h5>
+{% elif dri_saf_index == "Áo khoác nhẹ" %}
+<h5 style="color: orange;">Áo khoác nhẹ</h5>
+{% elif dri_saf_index == "Áo dài tay" %}
+<h5 style="color: yellow;">Áo dài tay</h5>
+{% elif dri_saf_index == "Quần áo thoáng khí" %}
+<h5 style="color: greenyellow;">Quần áo thoáng khí</h5>
+{% else %}
+<h5 style="color: green;">Quần đùi</h5>
+{% endif %}
+
+<h4>Sốc nhiệt</h4>
+<p>Chỉ số nhiệt là nhiệt độ cảm thấy như thế nào khi độ ẩm tương đối được kết hợp với nhiệt độ không khí.</p>
+{% if dri_saf_index == "Cực kỳ nguy hiểm" %}
+<h5 style="color: red;">Cực kỳ nguy hiểm</h5>
+{% elif dri_saf_index == "Nguy hiểm" %}
+<h5 style="color: orange;">Nguy hiểm</h5>
+{% elif dri_saf_index == "Hết sức thận trọng" %}
+<h5 style="color: yellow;">Hết sức thận trọng</h5>
+{% elif dri_saf_index == "Thận trọng" %}
+<h5 style="color: greenyellow;">Thận trọng</h5>
+{% else %}
+<h5 style="color: green;">An toàn</h5>
+{% endif %}
