@@ -248,7 +248,6 @@ def index(request):
             name_city = request.POST.get('name_city', 0)
             test = [temperature_city, pressure_city, humidity_city, precip_city, wind_city, cloud_city]
 
-
             prediction_city_text = predict_weather_city(name_city, test)
 
             context = {
