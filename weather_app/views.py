@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 from geopy.geocoders import Nominatim
 import pickle
@@ -8,49 +8,14 @@ from datetime import datetime, timedelta
 from datetime import date
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
+from .forms import UserRegisterForm
+from django.contrib.auth.models import User
 
 with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
-
-def predict_weather_city(location, test):
-    today = datetime.today()
-    def get_weather_data(api_key, location, date):
-        url = f"http://api.weatherapi.com/v1/history.json?key={api_key}&q={location}&dt={date}"
-        response = requests.get(url)
-
-        data = response.json()
-        return data
-    
-    api_key = '68571164b61e4eaca1d42437240609'
-
-    temp_c = []; pressure_mb = []; humidity = []; precip_mm = []
-    wind_mph = []; cloud = []; text = []
-
-    for i in range(7):
-        date = (today - timedelta(days=i)).strftime('%Y-%m-%d')
-        weather_data = get_weather_data(api_key, location, date)
-
-        for hour_data in weather_data['forecast']['forecastday'][0]['hour']:
-            temp_c.append(hour_data['temp_c'])
-            pressure_mb.append(hour_data['pressure_mb'])
-            humidity.append(hour_data['humidity'])
-            precip_mm.append(hour_data['precip_mm'])
-            wind_mph.append(hour_data['wind_kph'])
-            cloud.append(hour_data['cloud'])
-            text.append(hour_data['condition']['text'])
-
-    X = []; y = []
-    for i in range(len(temp_c)):
-        X.append([temp_c[i], pressure_mb[i], humidity[i], precip_mm[i], wind_mph[i], cloud[i]])
-        y.append([text[i]])
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-    rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-
-    rf_model.fit(X_train, y_train)
-
-
-    return rf_model.predict([test])
 
 def temperature_trend(temperatures):
     hours = np.arange(len(temperatures))
@@ -231,6 +196,7 @@ def heat_index_advice(weather_data):
 
     return advice
 
+
 def index(request):
     api_key = '68571164b61e4eaca1d42437240609'
     current_weather_url = 'http://api.weatherapi.com/v1/current.json?key={}&q={}&aqi=no'
@@ -377,3 +343,63 @@ def get_data(city, api_key, forecast_url):
     times = [hour['time'][-5:] for hour in forecast_hours]
 
     return temperatures, times
+
+
+from .forms import UserRegisterForm  
+from django import forms
+
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='Mật khẩu')
+    password_confirmation = forms.CharField(widget=forms.PasswordInput, label='Xác nhận mật khẩu')
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'password_confirmation']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirmation = cleaned_data.get('password_confirmation')
+
+        # Kiểm tra xem mật khẩu có khớp không
+        if password != password_confirmation:
+            raise forms.ValidationError("Mật khẩu không khớp!")
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, "Đăng ký thành công!")
+            return redirect('login')  # Thay đổi theo tên URL của trang đăng nhập
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'weather_app/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Đăng nhập thành công!")
+            return redirect('index')  # Chuyển hướng tới home_page
+        else:
+            messages.error(request, "Thông tin đăng nhập không đúng.")
+    return render(request, 'weather_app/login.html')
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, "Đăng xuất thành công!")
+    return redirect('index')
+
+def redirect_to_login(request):
+    if request.user.is_authenticated:
+        return redirect('index') 
+    return redirect('login')
+
+def home_page(request):
+    return render(request, 'weather_app/index.html') 

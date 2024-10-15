@@ -1,0 +1,33 @@
+{% extends 'weather_app/base.html' %}
+
+{% block title %}Đăng Ký{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <h2>Đăng Ký Tài Khoản</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+            {{ form.password }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password_confirmation.id_for_label }}">{{ form.password_confirmation.label }}</label>
+            {{ form.password_confirmation }}
+        </div>
+        <button type="submit" class="btn">Đăng Ký</button>
+    </form>
+    <p>Đã có tài khoản? <a href="{% url 'login' %}">Đăng nhập ngay</a></p>
+</div>
+{% endblock %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

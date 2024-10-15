@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 </head>
 
 <body>
+  <!-- {% include 'weather_app/test.html' %} -->
   {% include 'weather_app/predict_weather.html' %}
-  {% include 'weather_app/predict_city.html' %}
   <h2>Weather Map</h2>
   <div class="container-map">
     <iframe width="650" height="450"
