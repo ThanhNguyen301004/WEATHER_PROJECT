@@ -1,6 +1,6 @@
-# forms.py
 from django import forms
 from django.contrib.auth.models import User
+from .models import Document
 
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Mật khẩu")
@@ -8,7 +8,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'password_confirmation']
+        fields = ['username', 'email', 'password', 'password_confirmation']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -17,3 +17,8 @@ class UserRegisterForm(forms.ModelForm):
 
         if password and password_confirmation and password != password_confirmation:
             raise forms.ValidationError("Mật khẩu không khớp!")
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'image', 'description', 'pdf']

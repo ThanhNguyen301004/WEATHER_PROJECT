@@ -1,7 +1,6 @@
  body {
   font-family: Arial, sans-serif;
   text-align: center;
-  padding: 50px;
 }
 
 form {
@@ -35,7 +34,6 @@ button {
 .city-container {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   text-align: center;
-  backdrop-filter: blur(10px);
   border: 2px solid white;
   border-radius: 16px;
   margin-bottom: 20px;
@@ -67,7 +65,7 @@ button {
 
 .container {
   max-width: 600px;
-  margin: 50px auto;
+  margin: auto;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

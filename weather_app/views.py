@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
 from geopy.geocoders import Nominatim
 import pickle
@@ -13,6 +13,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from .models import Document
+from .forms import DocumentForm
 
 with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
@@ -204,32 +207,7 @@ def index(request):
     error_message = None
     if request.method == 'POST':
 
-        if 'predict_city_btn' in request.POST:
-            temperature_city = float(request.POST.get('temperature_city', 0))
-            pressure_city =  float(request.POST.get('pressure_city', 0))
-            humidity_city = float(request.POST.get('humidity_city', 0))
-            precip_city = float(request.POST.get('precip_city', 0))
-            wind_city = float(request.POST.get('wind_city', 0))
-            cloud_city = float(request.POST.get('cloud_city', 0))
-            name_city = request.POST.get('name_city', 0)
-            test = [temperature_city, pressure_city, humidity_city, precip_city, wind_city, cloud_city]
-
-            prediction_city_text = predict_weather_city(name_city, test)
-
-            context = {
-                'temperature_city': temperature_city,
-                'pressure_city': pressure_city,
-                'humidity_city': humidity_city,
-                'precip_city': precip_city,
-                'wind_city': wind_city,
-                'cloud_city': cloud_city,
-                'name_city': name_city,
-                'prediction_city_text': prediction_city_text[0],
-            }
-
-            return render(request, 'weather_app/index.html', context)
-
-        elif 'predict_btn' in request.POST:
+        if 'predict_btn' in request.POST:
             precipitation = float(request.POST.get('precipitation', 0))
             temp_max = float(request.POST.get('temp_max', 0))
             temp_min = float(request.POST.get('temp_min', 0))
@@ -346,46 +324,30 @@ def get_data(city, api_key, forecast_url):
 
 
 from .forms import UserRegisterForm  
-from django import forms
-
-class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label='Mật khẩu')
-    password_confirmation = forms.CharField(widget=forms.PasswordInput, label='Xác nhận mật khẩu')
-
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'password_confirmation']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_confirmation = cleaned_data.get('password_confirmation')
-
-        # Kiểm tra xem mật khẩu có khớp không
-        if password != password_confirmation:
-            raise forms.ValidationError("Mật khẩu không khớp!")
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
+            user.email = form.cleaned_data['email']
             user.save()
             messages.success(request, "Đăng ký thành công!")
             return redirect('login')  # Thay đổi theo tên URL của trang đăng nhập
     else:
-        form = UserRegistrationForm()
+        form = UserRegisterForm()
     return render(request, 'weather_app/register.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, email=email, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "Đăng nhập thành công!")
+            # messages.success(request, "Đăng nhập thành công!")
             return redirect('index')  # Chuyển hướng tới home_page
         else:
             messages.error(request, "Thông tin đăng nhập không đúng.")
@@ -394,12 +356,107 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.success(request, "Đăng xuất thành công!")
-    return redirect('index')
+    return redirect('login')
 
 def redirect_to_login(request):
     if request.user.is_authenticated:
         return redirect('index') 
     return redirect('login')
 
+
+# @login_required
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'weather_app/user_list.html', {'users': users})
+
+# @login_required
+def user_add(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, "User created successfully!")
+            return redirect('user_list')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'weather_app/user_form.html', {'form': form})
+
+# @login_required
+def user_edit(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            if 'password' in form.cleaned_data:
+                user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, "User updated successfully!")
+            return redirect('user_list')
+    else:
+        form = UserRegisterForm(instance=user)
+    return render(request, 'weather_app/user_form.html', {'form': form})
+
+# @login_required
+def user_delete(request, id):
+    user = get_object_or_404(User, id=id)
+    user.delete()
+    messages.success(request, "User deleted successfully!")
+    return redirect('user_list')
+
+
+def khihau(request):
+    documents = Document.objects.all()
+    return render(request, 'weather_app/khihau.html', {'documents': documents})
+
+def chitietkhihau(request, id):
+    document = get_object_or_404(Document, id=id)
+    return render(request, 'weather_app/chitietkhihau.html', {'document': document})
+
+def display_pdf(request, id):
+    document = get_object_or_404(Document, id=id)
+    return render(request, 'weather_app/display_pdf.html', {'document': document})
+
 def home_page(request):
     return render(request, 'weather_app/index.html') 
+
+
+
+
+def document_list(request):
+    documents = Document.objects.all()
+    return render(request, 'weather_app/document_list.html', {'documents': documents})
+
+
+def add_document(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('document_list')  # Redirect to a list view or a success page
+    else:
+        form = DocumentForm()
+    return render(request, 'weather_app/add_document.html', {'form': form})
+
+def update_document(request, id):
+    document = get_object_or_404(Document, id=id)
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('document_detail', id=document.id)  # Redirect to a detail view or a success page
+    else:
+        form = DocumentForm(instance=document)
+    return render(request, 'weather_app/update_document.html', {'form': form, 'document': document})
+
+def delete_document(request, id):
+    document = get_object_or_404(Document, id=id)
+    if request.method == 'POST':
+        document.delete()
+        return redirect('document_list')  # Redirect to a list view or a success page
+    return render(request, 'weather_app/delete_document.html', {'document': document})
+
+
+

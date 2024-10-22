@@ -12,8 +12,9 @@
   
 </head>
 
-<body>
-  <!-- {% include 'weather_app/test.html' %} -->
+<body style="margin: 0 100px;">
+  {% include 'weather_app/nav.html' %}
+  <div style="padding: 80px;"></div>
   {% include 'weather_app/predict_weather.html' %}
   <h2>Weather Map</h2>
   <div class="container-map">
@@ -22,14 +23,6 @@
       frameborder="0" style="border-radius: 15px;"></iframe>
   </div>
 
-  <form method="post">
-    {% csrf_token %}
-    <input type="text" name="city" placeholder="Search city">
-    <button type="submit" name="search_btn">Sreach</button>
-    {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
-    {% endif %}
-  </form>
 
   <div class="comparison-container">
     {% if weather_data %}

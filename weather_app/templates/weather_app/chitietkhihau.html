@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự báo khí tượng</title>
+    <style>
+        /* Định dạng khung chứa nội dung */
+        .info-box {
+            font-family: Roboto, 'Roboto Condensed', sans-serif;
+            background-color: white; 
+            border: 1px solid #ccc; 
+            padding: 20px; 
+            margin: 20px auto; 
+            width: 60%; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+
+        .info-box h2 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+
+        .info-box p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .info-box ol {
+            padding-left: 20px;
+            font-weight: bold;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+        }
+
+        .info-box ul li {
+            font-weight: normal;
+        }
+
+        .info-box img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    {% include 'weather_app/nav.html' %}
+    <div class="info-box">
+        <h2>{{ document.title }}</h2>
+
+        <img src="{% static document.image %}" alt="">
+
+        <ol>
+            <li>Dự báo khí tượng từ tháng 11/2024-01/2025</li>
+        </ol>
+        <ul>
+            <li>{{ document.description }}</li>
+        <p style="text-align:center;"><b>Chi tiết tin <a href="{% url 'display_pdf' document.id %}"><img  src="https://nchmf.gov.vn/Kttv//images/down-arrow.png" style="width:auto;height:auto"></a>
+        </b></p>
+    </div>
+
+</body>
+</html>
+
+

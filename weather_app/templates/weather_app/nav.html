@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            height: 60px;
+            background-color: #333;
+            overflow: hidden;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .nav-links {
+            display: flex;
+        }
+        nav a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        .search-container input[type="text"] {
+            padding: 6px;
+            margin: 8px 0;
+            font-size: 17px;
+            border: none;
+        }
+        .search-container button {
+            padding: 6px 10px;
+            margin: 8px 0;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+        }
+        .search-container button:hover {
+            background: #ccc;
+        }
+        .right-nav {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="/home">Trang chủ</a>
+            <a href="/home/khihau">Khí hậu</a>
+            <a href="#services">Thủy văn</a>
+            <a href="#contact">Hải văn</a>
+        </div>
+        <div class="search-container">
+            <form method="post" onsubmit="return checkForError()">
+                {% csrf_token %}
+                <input id="city-input" type="text" name="city" placeholder="Hãy nhập vào đây...">
+                <button type="submit" name="search_btn">Tìm kiếm</button>
+                {% if error_message %}
+                <script>
+                    document.getElementById('city-input').placeholder = "Không tìm thấy";
+                </script>
+                {% endif %}
+            </form>
+        </div>
+        <div class="right-nav">
+            <a href="/register" class="register">Đăng ký</a>
+            <a href="/login" class="login">Đăng nhập</a>
+            <a href="/logout" class="logout">Đăng xuất</a>
+        </div>
+    </nav>
+</body>
+</html>

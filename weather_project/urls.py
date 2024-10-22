@@ -20,12 +20,7 @@ from weather_app import views
 from django.shortcuts import redirect
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', views.login, name='login'),
-    path('index/', views.index, name='index'),
-    path('', lambda request: redirect('login'), name='redirect_to_login'),  # Chuyển hướng đến trang đăng nhập
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
-    path('home/', views.index, name='index'),  # Thêm dòng này
-    path('logout/', views.user_logout, name='logout'),
+    path('', include('weather_app.urls')),
+ 
 ]
 

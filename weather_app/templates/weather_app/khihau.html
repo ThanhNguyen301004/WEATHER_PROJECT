@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-family: Roboto, 'Roboto Condensed', sans-serif;
+        }
+        .container-lvl {
+            display: flex;
+            margin: 0 100px;
+            margin-top: 50px;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .right {
+            padding: 10px;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        .right a {
+            text-decoration: none;
+            color: black;
+        }
+        .right a:hover{
+            text-decoration: underline;
+        }
+        .left img {
+            width: 250px;
+            height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'weather_app/nav.html' %}
+    <div class="container">
+        {% for document in documents %}
+        <div class="container-lvl">
+            <div class="left">
+
+                <a href="{% url 'chitietkhihau' document.id %}">
+                    <img src="{% static document.image %}" alt="">
+                </a>
+            </div>
+            <div class="right">
+                <a href="{% url 'chitietkhihau' document.id %}">{{ document.title }}</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
